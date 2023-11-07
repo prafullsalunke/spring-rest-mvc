@@ -1,6 +1,7 @@
 package prafull.springboot.spring6restmvc.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import prafull.springboot.spring6restmvc.model.Customer;
 
 import java.time.LocalDateTime;
@@ -74,5 +75,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomerById(UUID customerId) {
         customerMap.remove(customerId);
+    }
+
+    @Override
+    public void updateCustomerByPatch(UUID customerId, Customer customer) {
+        Customer existing = customerMap.get(customerId);
+        if(StringUtils.hasText(existing.getCustomerName())){
+            existing.setCustomerName(customer.getCustomerName());
+        }
+        if(existing.getVersion() != null){
+            existing.setVersion(customer.getVersion());
+        }
+        existing.setLastModifiedDate(LocalDateTime.now());
     }
 }
