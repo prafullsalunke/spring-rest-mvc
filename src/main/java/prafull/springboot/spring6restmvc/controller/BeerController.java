@@ -18,7 +18,7 @@ import java.util.UUID;
 public class BeerController {
     private final BeerService beerService;
 
-    @RequestMapping("/api/v1/beers")
+    @RequestMapping("/api/v1/beer")
     public List<Beer> listBeers(){
         return beerService.listBeers();
     }
