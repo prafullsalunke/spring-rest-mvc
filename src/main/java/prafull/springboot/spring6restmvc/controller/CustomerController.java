@@ -19,22 +19,30 @@ import java.util.UUID;
 @RequestMapping("/api/v1/customer")
 public class CustomerController {
     private final CustomerService customerService;
+
+    @PutMapping(value ="{customerId}")
+    public ResponseEntity updateById(@PathVariable UUID customerId, @RequestBody Customer customer) {
+        customerService.updateCustomerById(customerId, customer);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+    }
+
     @RequestMapping(method = RequestMethod.GET)
-    public List<Customer> listCustomers(){
+    public List<Customer> listCustomers() {
         return customerService.listCustomers();
     }
 
-    @RequestMapping(value ="{customerId}", method = RequestMethod.GET)
-    public Customer getBeerByI(@PathVariable("customerId") UUID beerId){
+    @RequestMapping(value = "{customerId}", method = RequestMethod.GET)
+    public Customer getCustomerById(@PathVariable("customerId") UUID beerId) {
         log.debug("Get Customer by Id - in controller");
         return customerService.getById(beerId);
     }
 
     @PostMapping
-    public ResponseEntity handlePost(@RequestBody Customer customer){
+    public ResponseEntity handlePost(@RequestBody Customer customer) {
         Customer savedCustomer = customerService.saveNewCustomer(customer);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/customer/"+savedCustomer.getId().toString());
+        headers.add("Location", "/api/v1/customer/" + savedCustomer.getId().toString());
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 }
